@@ -9,7 +9,7 @@ type EntryPlayerNameType = {
 }
 
 const NameField = ({playerName, setPlayerName, errorValue, setErrorValue}:EntryPlayerNameType) => {
-    
+    playerName = 'テストプレイヤー1'
     return (
         <Box sx={{pb:3}}>
             <TextField error={errorValue} required id="input-player-name" label="プレイヤー名" variant="outlined" value={playerName} onChange={e => setPlayerName(e.target.value)} autoComplete="off" />

@@ -2,16 +2,17 @@ import express from 'express';
 import * as path from 'path'
 const app = express();
 import http from 'http';
+import socketio from 'socket.io';
 const server = http.createServer(app);
-import { Server } from 'socket.io';
-const io = new Server(server);
+const io = new socketio.Server(server);
+console.log(io);
 
 // サーバー側ホットリロード
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('../webpack.config.js');
-const devServerEnabled = false;
+const devServerEnabled = true;
 
 if (devServerEnabled) {
   config.entry.app.unshift('webpack-hot-middleware/client?reload=true&timeout=1000');
@@ -31,13 +32,13 @@ app.get('/*', function(req, res, next) {
 
 // Socket.io
 io.on('connection', socket => {
-  console.log('a user connected ' + socket.id);
-  socket.on('hello', message => {
-    console.log(message);
+  console.log(`${socket.id} is connected`);
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} is disconnected.`)
   });
 });
 
 // サーバー起動
-app.listen(process.env.PORT || 3001, function(){
+server.listen(process.env.PORT || 3001, function(){
     console.log('express app is started!');
 });

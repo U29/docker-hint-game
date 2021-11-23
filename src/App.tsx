@@ -17,11 +17,17 @@ import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import TopPage from "./pages/TopPage";
 import RoomPage from "./pages/RoomPage";
 import RedirectToTop from "./components/RedirectToTop";
-import { Socket } from "socket.io";
+import { io } from "socket.io-client";
 
 const App = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
     const [darkMode, setDarkMode] = useState(useMemo(() => prefersDarkMode, [prefersDarkMode]));
+    const [socket, setSocket] = useState(io());
+    console.log(socket);
+    socket.on('connect', () => {
+        setSocket(socket);
+        console.log(`you are ${socket.id}`);
+    });
     return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
             <CssBaseline />
@@ -34,7 +40,6 @@ const App = () => {
                             <Route path="/join/:roomId" element={<TopPage />} />
                                 <Route path="/room" element={<RedirectToTop />} />
                                 <Route path="/room/:roomId" element={<RoomPage roomId={'1234'} />} />
-
                         </Routes>
                     </Router>
                     <DebugButtons />
