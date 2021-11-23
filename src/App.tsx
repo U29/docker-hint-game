@@ -17,6 +17,7 @@ import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import TopPage from "./pages/TopPage";
 import RoomPage from "./pages/RoomPage";
 import RedirectToTop from "./components/RedirectToTop";
+import { Socket } from "socket.io";
 
 const App = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')

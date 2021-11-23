@@ -1,4 +1,5 @@
 import { Button, ButtonGroup, Typography, Box } from "@mui/material";
+import SocketManager from "./SocketManager";
 
 const DebugButtons = () => {
     return (
