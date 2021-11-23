@@ -1,0 +1,29 @@
+{
+    "users": [
+        {
+            "name": "ユーザー01",
+            "isHost": true,
+            "clientId": "randomAAAA"
+        },
+        {
+            "name": "ユーザー02",
+            "isHost": false,
+            "clientId": "randomBBBB"
+        },
+        {
+            "name": "ユーザー03",
+            "isHost": false,
+            "clientId": "randomCCCC"
+        },
+        {
+            "name": "ユーザー04134123412341234123412342341234000000000000000",
+            "isHost": false,
+            "clientId": "randomDDDD"
+        },
+        {
+            "name": "ユーザー05",
+            "isHost": false,
+            "clientId": "randomEEEE"
+        }
+    ]
+}

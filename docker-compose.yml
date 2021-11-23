@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  node:
+    build: ./docker/node
+    tty: true
+    volumes:
+      - ./:/var/www/app
+    working_dir: /var/www/app
+    ports:
+      - 3000:3000

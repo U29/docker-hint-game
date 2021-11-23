@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "ES6",
+        "module": "commonjs",
+        "jsx": "react-jsx",
+        "moduleResolution": "node",
+        "lib": [
+            "ES2020",
+            "DOM"
+        ],
+        "esModuleInterop": true,
+        "resolveJsonModule": true
+    }
+}

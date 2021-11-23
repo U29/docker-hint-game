@@ -1,0 +1,8 @@
+{
+    "env": {
+        "NODE_ENV": "dev"
+    },
+    "watch": ["server"],
+    "ext": "js, ts, json",
+    "exec": "ts-node ./server/server.ts"
+}
