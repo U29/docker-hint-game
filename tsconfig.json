@@ -10,6 +10,12 @@
             "DOM"
         ],
         "esModuleInterop": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "allowJs": true,
+        "skipLibCheck": true,
+        "outDir": ""
     }
 }

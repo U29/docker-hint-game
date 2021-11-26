@@ -1,13 +1,13 @@
 import { Dialog, DialogTitle, List, ListItem, ListItemText } from "@mui/material";
 
-type RoomHostUserEditDialogType = {
+type RoomHostPlayerEditDialogType = {
     openDialog: boolean,
     selectedDialogValue: string,
     onClose: (value: string) => void,
-    userName: string
+    playerName: string
   }
   
-const RoomHostUserEditDialog = ({ onClose, selectedDialogValue, openDialog, userName }:RoomHostUserEditDialogType) => {
+const RoomHostPlayerEditDialog = ({ onClose, selectedDialogValue, openDialog, playerName }:RoomHostPlayerEditDialogType) => {
 const handleClose = () => {
     onClose(selectedDialogValue);
 };
@@ -20,7 +20,7 @@ const menus = ['ホストを渡す', '追放する'];
 
 return (
     <Dialog onClose={handleClose} open={openDialog}>
-    <DialogTitle>{userName}</DialogTitle>
+    <DialogTitle>{playerName}</DialogTitle>
     <List sx={{ pt: 0}}>
         {
             menus.map((menu) => (
@@ -34,4 +34,4 @@ return (
 );
 }
 
-export default RoomHostUserEditDialog;
+export default RoomHostPlayerEditDialog;

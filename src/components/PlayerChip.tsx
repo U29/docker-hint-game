@@ -3,7 +3,7 @@ import FaceIcon from "@mui/icons-material/Face";
 import StarsIcon from '@mui/icons-material/Stars';
 import styled from "@emotion/styled";
 import { useState } from "react";
-import RoomHostUserEditDialog from "./RoomHostUserEditDialog";
+import RoomHostPlayerEditDialog from './RoomHostPlayerEditDialog';
 
 const TestClientId = 'randomAAAA';
 const clientId = TestClientId;
@@ -17,15 +17,15 @@ const CustomChip = styled(Chip)({
     margin: "6px"
 });
 
-type UserChipType = {
-    user: {
+type PlayerChipType = {
+    player: {
         name: string,
         isHost: boolean,
         clientId: string
     }
 }
 
-const UserChip = ( { user }:UserChipType ) => {
+const PlayerChip = ( { player }:PlayerChipType ) => {
     // Tooltip State
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const handleTooltipOpen = () => {
@@ -47,8 +47,8 @@ const UserChip = ( { user }:UserChipType ) => {
     // Dialog State
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedDialogValue, setSelectedDialogValue] = useState('');
-    const handleClickUser = () => {
-        console.log(user.name);
+    const handleClickPlayer = () => {
+        console.log(player.name);
         setOpenDialog(true);
     };
     const handleCloseDialog = (value: string) => {
@@ -60,18 +60,18 @@ const UserChip = ( { user }:UserChipType ) => {
         <>
             <Grid item>
                 {
-                    !user.isHost ? 
-                        <CustomChip icon={<FaceIcon />} label={user.name} onClick={handleClickUser} color={clientId===user.clientId ? "primary" : "default"} />
+                    !player.isHost ? 
+                        <CustomChip icon={<FaceIcon />} label={player.name} onClick={handleClickPlayer} color={clientId===player.clientId ? "primary" : "default"} />
                         :
                         <ClickAwayListener onClickAway={handleCloseTooltip}>
-                            <CustomChip icon={<FaceIcon />} deleteIcon={HostIcon} label={user.name} onClick={handleClickUser} onDelete={handleTooltipOpen} color={clientId===user.clientId ? "primary" : "default"} />
+                            <CustomChip icon={<FaceIcon />} deleteIcon={HostIcon} label={player.name} onClick={handleClickPlayer} onDelete={handleTooltipOpen} color={clientId===player.clientId ? "primary" : "default"} />
                         </ClickAwayListener>
                 }
             </Grid>
                 {/* // TODO: ホスト以外がユーザーをクリックできないように修正する。 */}
-                <RoomHostUserEditDialog selectedDialogValue={selectedDialogValue} openDialog={openDialog} onClose={handleCloseDialog} userName={user.name} />
+                <RoomHostPlayerEditDialog selectedDialogValue={selectedDialogValue} openDialog={openDialog} onClose={handleCloseDialog} playerName={player.name} />
         </>
     );
 }
 
-export default UserChip;
+export default PlayerChip;

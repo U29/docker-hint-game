@@ -1,22 +1,48 @@
 import { Typography, Box, Chip, Tooltip, ClickAwayListener, Button, Grid, useMediaQuery } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useMemo } from "react";
-import testUsers from "../test_json/Users.json";
-import UserChip from "../components/UserChip";
+import { useEffect, useState, useMemo, useLayoutEffect } from "react";
+import PlayerChip from "../components/PlayerChip";
 import InviteButton from "../components/InviteButton";
 import { useTheme } from '@mui/material/styles';
 import json2mq from 'json2mq'
+import { Socket } from 'socket.io-client'
+import Room from "../../server/Room";
 
 type RoomPageType = {
-    roomId: string
+    socket: Socket,
+    room: {
+        roomId: string
+    }
 }
 
-const RoomPage = ( {roomId}:RoomPageType ) => {
-    const Users = testUsers;
-    const [users, setUsers] = useState(Users);   
+type PlayerType = {
+    playerId: string;
+    playerName: string;
+    isHost: boolean;
+}
 
-
-    // User list CSS customization
+const RoomPage = ( {socket, room}:RoomPageType ) => {
+    const [players, setPlayers] = useState({});
+    const paramRoomId = useParams().roomId;
+    const [roomId, setRoomId] = useState('');
+    useEffect(() => {
+        if(paramRoomId !== '' && typeof(paramRoomId) !== 'undefined'){
+            setRoomId(paramRoomId);
+        }else{
+            setRoomId('');
+        }
+    }, []);
+    useEffect(() => {
+        console.log(socket.id);
+        socket.emit('reqRoomData', roomId);
+    }, [roomId]);
+    useEffect(() => {
+        socket.on('resRoomData', resRoom => {
+            console.log(`socketの一元管理やめたroom: ${resRoom}`);
+        });
+    }, [room]);
+    
+    // Player list CSS customization
     const theme = useTheme();
     const isMdSize = useMediaQuery(
         json2mq({
@@ -26,7 +52,7 @@ const RoomPage = ( {roomId}:RoomPageType ) => {
     useEffect(() => {
         setSmSize(isMdSize);
     }, [isMdSize, useMediaQuery(theme.breakpoints.up('sm'))]);
-    // End of user list CSS customization
+    // End of player list CSS customization
 
     return (
         <Box sx={{width: '100%'}}>
@@ -37,7 +63,7 @@ const RoomPage = ( {roomId}:RoomPageType ) => {
             <Box p={3} sx={{flexGrow: 1, width: '90%', margin:'0 auto'}}>
                 <Grid container justifyContent={smSize ? 'space-between' : 'center'} >
                     { 
-                        users.users.map((user) => <UserChip user={user} key={user.clientId} />)
+                        // players.players.map((player) => <PlayerChip player={player} key={player.clientId} />)
                     }
                 </Grid>
             </Box>

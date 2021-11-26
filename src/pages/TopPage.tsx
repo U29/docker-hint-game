@@ -6,8 +6,14 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useParams } from "react-router";
+import { Socket } from 'socket.io-client'
 
-const TopPage = () => {
+type TopPageType = {
+    socket: Socket,
+    initializedSocket: boolean
+}
+
+const TopPage = ({socket, initializedSocket}:TopPageType) => {
     const [tabValue, setTabValue] = useState('1');
     const handleTabChange = (event: SyntheticEvent, newValue: string) => {
         setTabValue(newValue);
@@ -32,10 +38,10 @@ const TopPage = () => {
                     </TabList>
                 </Box>
                 <TabPanel value='1'>
-                    <EntryJoinGame playerName={playerName} setPlayerName={setPlayerName} roomId={roomId} />
+                    <EntryJoinGame playerName={playerName} setPlayerName={setPlayerName} roomId={roomId} socket={socket} initializedSocket={initializedSocket} />
                 </TabPanel>
                 <TabPanel value='2'>
-                    <EntryHostGame playerName={playerName} setPlayerName={setPlayerName} />
+                    <EntryHostGame playerName={playerName} setPlayerName={setPlayerName} socket={socket} initializedSocket={initializedSocket} />
                 </TabPanel>
             </TabContext>
         </Box>
