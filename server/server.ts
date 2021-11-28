@@ -60,6 +60,25 @@ io.on('connection', socket => {
     socket.emit('roomData', room);
   });
 
+  // ルーム参加ボタンが押されたとき
+  socket.on('joinRoom', data => {
+    if (rooms.map(room => room.roomId === data.roomId && room)) {
+      console.log(`${socket.id} is Joined Room#${data.roomId}`);
+      const room = rooms.find(room => room.roomId === data.roomId && room);
+      if (typeof(room) !== 'undefined') {
+        const player = new Player(socket.id, data.playerName);
+        room.getCurrentSession().pushPlayer(player);
+        rooms.push(room);
+        socket.join(room.roomId);
+        console.log(`${socket.id} joined Room#${room.roomId}`);
+        console.log(room);
+        socket.emit('loadRoomPage', room);
+        socket.emit('roomData', room);
+      }
+    }
+  });
+
+
   // ルーム情報取得API
   socket.on('reqRoomData', roomId => {
     // ルームに入っているかのチェック（不正防止）
@@ -69,9 +88,10 @@ io.on('connection', socket => {
     if (socket.rooms.has(roomId)) 
     {
       console.log('送ります');
-      const resRoom = rooms.map(room => room.roomId === roomId && room);
-      socket.emit('resRoomData', resRoom);
-      console.log('nemuii');
+      if (rooms.map(room => room.roomId === roomId && room)) {
+        const resRoom = rooms.find(room => room.roomId === roomId && room);
+        io.sockets.in(roomId).emit('resRoomData', resRoom);
+      }
     }
   });
 });

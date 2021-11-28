@@ -15,6 +15,19 @@ type RoomPageType = {
     }
 }
 
+type RoomType = {
+    roomId: string;
+    hostId: string;
+    sessions: SessionType[];
+    currentSessionNum: number;
+}
+
+type SessionType = {
+    sessionNum: number;
+    players: PlayerType[];
+    panelist: Partial<PlayerType>;
+}
+
 type PlayerType = {
     playerId: string;
     playerName: string;
@@ -22,7 +35,7 @@ type PlayerType = {
 }
 
 const RoomPage = ( {socket, room}:RoomPageType ) => {
-    const [players, setPlayers] = useState({});
+    const [players, setPlayers] = useState<PlayerType[]>([]);
     const paramRoomId = useParams().roomId;
     const [roomId, setRoomId] = useState('');
     useEffect(() => {
@@ -36,9 +49,12 @@ const RoomPage = ( {socket, room}:RoomPageType ) => {
         console.log(socket.id);
         socket.emit('reqRoomData', roomId);
     }, [roomId]);
+    
     useEffect(() => {
-        socket.on('resRoomData', resRoom => {
+        socket.on('resRoomData', (resRoom:RoomType) => {
             console.log(resRoom);
+            console.log(resRoom.sessions[resRoom.currentSessionNum].sessionNum);
+            setPlayers(resRoom.sessions[resRoom.currentSessionNum].players);
         });
     }, [room]);
     
@@ -63,7 +79,7 @@ const RoomPage = ( {socket, room}:RoomPageType ) => {
             <Box p={3} sx={{flexGrow: 1, width: '90%', margin:'0 auto'}}>
                 <Grid container justifyContent={smSize ? 'space-between' : 'center'} >
                     { 
-                        // players.players.map((player) => <PlayerChip player={player} key={player.clientId} />)
+                        players.map((player) => <PlayerChip player={player} key={player.playerId} />)
                     }
                 </Grid>
             </Box>

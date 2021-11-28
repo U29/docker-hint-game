@@ -16,7 +16,7 @@ const handleListItemClick = (value: string) => {
     onClose(value);
 };
 
-const menus = ['ホストを渡す', '追放する'];
+const menus = ['ホストを渡す', '追放する', '閉じる'];
 
 return (
     <Dialog onClose={handleClose} open={openDialog}>

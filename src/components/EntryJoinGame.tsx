@@ -19,6 +19,14 @@ const EntryJoinGame = ( {playerName, setPlayerName, roomId, socket, initializedS
         playerName === '' ? setErrorPlayerValue(true) : setErrorPlayerValue(false);
         // typeof(roomId) === 'undefined' && roomId = '';
         inputRoomId === '' || inputRoomId.length < 4 ? setErrorRoomIdValue(true) : setErrorRoomIdValue(false);
+
+        if (playerName !== '' && (inputRoomId !== '' || inputRoomId.length > 4)){
+            console.log('clicked');
+            socket.emit('joinRoom', {
+                playerName: playerName,
+                roomId: inputRoomId
+            });
+        }
     }
     useEffect(()=>{
         setInputRoomId(roomId);

@@ -19,9 +19,9 @@ const CustomChip = styled(Chip)({
 
 type PlayerChipType = {
     player: {
-        name: string,
-        isHost: boolean,
-        clientId: string
+        playerId: string;
+        playerName: string;
+        isHost: boolean;
     }
 }
 
@@ -48,7 +48,7 @@ const PlayerChip = ( { player }:PlayerChipType ) => {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedDialogValue, setSelectedDialogValue] = useState('');
     const handleClickPlayer = () => {
-        console.log(player.name);
+        console.log(player.playerName);
         setOpenDialog(true);
     };
     const handleCloseDialog = (value: string) => {
@@ -61,15 +61,15 @@ const PlayerChip = ( { player }:PlayerChipType ) => {
             <Grid item>
                 {
                     !player.isHost ? 
-                        <CustomChip icon={<FaceIcon />} label={player.name} onClick={handleClickPlayer} color={clientId===player.clientId ? "primary" : "default"} />
+                        <CustomChip icon={<FaceIcon />} label={player.playerName} onClick={handleClickPlayer} color={clientId===player.playerId ? "primary" : "default"} />
                         :
                         <ClickAwayListener onClickAway={handleCloseTooltip}>
-                            <CustomChip icon={<FaceIcon />} deleteIcon={HostIcon} label={player.name} onClick={handleClickPlayer} onDelete={handleTooltipOpen} color={clientId===player.clientId ? "primary" : "default"} />
+                            <CustomChip icon={<FaceIcon />} deleteIcon={HostIcon} label={player.playerName} onClick={handleClickPlayer} onDelete={handleTooltipOpen} color={clientId===player.playerId ? "primary" : "default"} />
                         </ClickAwayListener>
                 }
             </Grid>
                 {/* // TODO: ホスト以外がユーザーをクリックできないように修正する。 */}
-                <RoomHostPlayerEditDialog selectedDialogValue={selectedDialogValue} openDialog={openDialog} onClose={handleCloseDialog} playerName={player.name} />
+                <RoomHostPlayerEditDialog selectedDialogValue={selectedDialogValue} openDialog={openDialog} onClose={handleCloseDialog} playerName={player.playerName} />
         </>
     );
 }

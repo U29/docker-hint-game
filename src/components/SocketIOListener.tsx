@@ -16,7 +16,7 @@ const SocketIOListener = ({socket}: SocketIOListenerType) => {
     useEffect(() => {
         socket.on('resRoomData', room => {
             console.log('受信');
-            console.log(room);
+            // console.log(room);
         });
     }, []);
 
