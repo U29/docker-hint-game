@@ -71,12 +71,13 @@ io.on('connection', socket => {
       console.log('送ります');
       const resRoom = rooms.map(room => room.roomId === roomId && room);
       socket.emit('resRoomData', resRoom);
+      console.log('nemuii');
     }
   });
 });
 
 // サーバー起動
-server.listen(process.env.PORT || 3001, function(){
+server.listen(process.env.PORT || 3000, function(){
     console.log('express app is started!');
 });
 

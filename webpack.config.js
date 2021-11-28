@@ -21,7 +21,7 @@ module.exports = {
   devtool: 'source-map',
   devServer: {
     static: path.join(__dirname, 'dist'),
-    port: 3001,
+    port: 3000,
     host: `localhost`,
   },
   resolve: {

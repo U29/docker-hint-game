@@ -38,7 +38,7 @@ const RoomPage = ( {socket, room}:RoomPageType ) => {
     }, [roomId]);
     useEffect(() => {
         socket.on('resRoomData', resRoom => {
-            console.log(`socketの一元管理やめたroom: ${resRoom}`);
+            console.log(resRoom);
         });
     }, [room]);
     
