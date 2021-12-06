@@ -47,7 +47,10 @@ const App = () => {
             <CssBaseline />
                 <Container maxWidth="sm">
                     <Title />
-                    <ColorSchemeSwitch prefersDarkMode={prefersDarkMode} darkMode={darkMode} setDarkMode={setDarkMode} />
+                    <ColorSchemeSwitch prefersDarkMode={prefersDarkMode} darkMode={
+                        // darkMode
+                        false // TODO Debug
+                        } setDarkMode={setDarkMode} />
                     <Router>
                         <SocketIOListener socket={socket} />
                         <Routes>

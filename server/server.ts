@@ -41,8 +41,12 @@ io.on('connection', socket => {
   // 接続確認
   console.log(`${socket.id} is connected`);
   // 切断確認
+  socket.on('disconnecting', () => {
+    console.log(socket.rooms);
+  });
   socket.on('disconnect', () => {
-    console.log(`${socket.id} is disconnected.`)
+    
+    console.log(`${socket.id} is disconnected.`);
   });
 
   // ルーム作成ボタン押されたとき
@@ -82,7 +86,6 @@ io.on('connection', socket => {
   // ルーム情報取得API
   socket.on('reqRoomData', roomId => {
     // ルームに入っているかのチェック（不正防止）
-    console.log('aaa');
     console.log(roomId);
     console.log(socket.rooms);
     if (socket.rooms.has(roomId)) 
@@ -97,8 +100,9 @@ io.on('connection', socket => {
 });
 
 // サーバー起動
-server.listen(process.env.PORT || 3000, function(){
-    console.log('express app is started!');
+const PORT = 3001
+server.listen(process.env.PORT || PORT, function(){
+    console.log(`${PORT}express app is started!`);
 });
 
 /**
