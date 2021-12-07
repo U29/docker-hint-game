@@ -6,23 +6,6 @@ import socketio from 'socket.io';
 const server = http.createServer(app);
 const io = new socketio.Server(server);
 
-// サーバー側ホットリロード
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('../webpack.config.js');
-const devServerEnabled = true;
-
-if (devServerEnabled) {
-  config.entry.app.unshift('webpack-hot-middleware/client?reload=true&timeout=1000');
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
-  const compiler = webpack(config);
-  app.use(webpackDevMiddleware(compiler, {
-    publicPath: config.output.publicPath
-  }));
-  app.use(webpackHotMiddleware(compiler));
-}
-
 // クラス読み込み
 import Room from './Room';
 import Player from './Player'
@@ -42,7 +25,12 @@ io.on('connection', socket => {
   console.log(`${socket.id} is connected`);
   // 切断確認
   socket.on('disconnecting', () => {
-    console.log(socket.rooms);
+    console.log('🔽切断した人の部屋🔽');
+    console.dir(socket.rooms, {depth: 3});
+    const room = socket.rooms.size > 1 ? getRoom([...socket.rooms][1]) : null;
+    console.log(room);
+    room?.sessions[room?.currentSessionNum].removePlayer(socket.id);
+    room && io.sockets.in(room.roomId).emit('resRoomData', room);
   });
   socket.on('disconnect', () => {
     
@@ -55,7 +43,7 @@ io.on('connection', socket => {
     const newRoomId = generateRoomId(4);
     const room = new Room(newRoomId, socket.id);
     const player = new Player(socket.id, playerName, true);
-    room.getCurrentSession().pushPlayer(player);
+    room.getCurrentSession().addPlayer(player);
     rooms.push(room);
     socket.join(room.roomId);
     console.log(`${socket.id} joined Room#${room.roomId}`);
@@ -71,7 +59,7 @@ io.on('connection', socket => {
       const room = rooms.find(room => room.roomId === data.roomId && room);
       if (typeof(room) !== 'undefined') {
         const player = new Player(socket.id, data.playerName);
-        room.getCurrentSession().pushPlayer(player);
+        room.getCurrentSession().addPlayer(player);
         rooms.push(room);
         socket.join(room.roomId);
         console.log(`${socket.id} joined Room#${room.roomId}`);
@@ -90,7 +78,6 @@ io.on('connection', socket => {
     console.log(socket.rooms);
     if (socket.rooms.has(roomId)) 
     {
-      console.log('送ります');
       if (rooms.map(room => room.roomId === roomId && room)) {
         const resRoom = rooms.find(room => room.roomId === roomId && room);
         io.sockets.in(roomId).emit('resRoomData', resRoom);
@@ -102,7 +89,7 @@ io.on('connection', socket => {
 // サーバー起動
 const PORT = 3001
 server.listen(process.env.PORT || PORT, function(){
-    console.log(`${PORT}express app is started!`);
+    console.log(`${PORT} express app is started!`);
 });
 
 /**
@@ -125,5 +112,19 @@ server.listen(process.env.PORT || PORT, function(){
   } else {
       // ルームIDが重複した場合、新たに実行
       return generateRoomId(digits);
+  }
+}
+
+/**
+ * ルームIDからルームオブジェクトを返す関数
+ * @param _roomId 検索するルームID
+ * @returns ルームオブジェクト
+ */
+const getRoom = (_roomId: string): Room | null => {
+  const _room = rooms.find(room => room.roomId === _roomId);
+  if (typeof(_room) !== 'undefined'){
+    return _room;
+  } else {
+    return null;
   }
 }

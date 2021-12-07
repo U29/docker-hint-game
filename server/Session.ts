@@ -11,7 +11,12 @@ export default class Session {
         this.panelist = {};
     }
 
-    pushPlayer(player: Player): void {
+    addPlayer(player: Player): void {
         this.players.push(player);
+    }
+
+    removePlayer(_playerId: string): void {
+        this.players = this.players.filter(player => player.playerId !== _playerId);
+        console.log(this.players);
     }
 }
