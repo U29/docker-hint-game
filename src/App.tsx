@@ -17,10 +17,14 @@ import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import TopPage from "./pages/TopPage";
 import RoomPage from "./pages/RoomPage";
 import RedirectToTop from "./components/RedirectToTop";
+import { useCookies } from "react-cookie";
 import { io } from "socket.io-client";
 const initSocket = io();
 
 const App = () => {
+    // Cookie
+    const [cookies, setCookies, removeCookies] = useCookies();
+
     // ダークモード or ライトモード
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
     const [darkMode, setDarkMode] = useState(useMemo(() => prefersDarkMode, [prefersDarkMode]));
@@ -57,7 +61,7 @@ const App = () => {
                             <Route path="/" element={<TopPage socket={socket} initializedSocket={initializedSocket} />} />
                             <Route path="/join/:roomId" element={<TopPage socket={socket} initializedSocket={initializedSocket} />} />
                             <Route path="/room" element={<RedirectToTop />} />
-                                <Route path="/room/:roomId" element={<RoomPage socket={socket} room={room} />} />
+                            <Route path="/room/:roomId" element={<RoomPage socket={socket} room={room} cookies={cookies} setCookies={setCookies} />} />
                         </Routes>
                     </Router>
                     <DebugButtons socket={socket} />

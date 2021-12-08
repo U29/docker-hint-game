@@ -13,6 +13,8 @@ type RoomPageType = {
     room: {
         roomId: string
     }
+    cookies: any,
+    setCookies: any
 }
 
 type RoomType = {
@@ -34,7 +36,7 @@ type PlayerType = {
     isHost: boolean;
 }
 
-const RoomPage = ( {socket, room}:RoomPageType ) => {
+const RoomPage = ( {socket, room, cookies, setCookies}:RoomPageType ) => {
     const [players, setPlayers] = useState<PlayerType[]>([]);
     const paramRoomId = useParams().roomId;
     const [roomId, setRoomId] = useState('');
@@ -55,6 +57,7 @@ const RoomPage = ( {socket, room}:RoomPageType ) => {
             console.log(resRoom);
             console.log(resRoom.sessions[resRoom.currentSessionNum].sessionNum);
             setPlayers(resRoom.sessions[resRoom.currentSessionNum].players);
+            setCookies('previousSocketId', socket.id);
         });
     }, [room]);
     
@@ -74,7 +77,7 @@ const RoomPage = ( {socket, room}:RoomPageType ) => {
         <Box sx={{width: '100%'}}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider', textAlign: 'center' }}>
                 <Typography variant="h6">Room{roomId}</Typography>
-                <Typography variant="h5">ユーザーリスト</Typography>
+                <Typography variant="h5">ユーザーリスト{cookies.previousSocketId}</Typography>
             </Box>
             <Box p={3} sx={{flexGrow: 1, width: '90%', margin:'0 auto'}}>
                 <Grid container justifyContent={smSize ? 'space-between' : 'center'} >
